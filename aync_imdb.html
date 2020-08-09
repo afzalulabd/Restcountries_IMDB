@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async_imdb</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.example button:hover {
+  background: #0b7dda;
+}
+
+/* form.example::after {
+  content: "";
+  clear: both;
+  display: table;
+} */
+</style>
+
+</style>
+</head>
+<body>
+
+    <div class='container'>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="../Aug02/index.html">Fetch/Promise</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../Aug02/async_promise.html">Async/Promise</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="../Aug02/aync_imdb.html">Async/IMDB</a>
+              </li>
+          </ul>
+        </div>
+      </nav>
+      <div id="allcountry" style="border: 2px solid black; background-color: white; height:1000px;">
+        <!-- <form class="example" style="margin:auto;max-width:300px;position :relative;top: 150px;"> -->
+            <input type="text" placeholder="Search.." name="search2"  id="myInput"  onkeyup="getkey(event)">
+           <button onclick="normal()">
+                <i class="fa fa-search"></i>
+            </button> 
+           <div id="movieinfo" style="height: 200px; background-color: black;margin-top: 50px;">
+                    <label for="Title"style="color:white">MovieTitle  : </label>
+                    <span id="spantitle" style="color:white"></span>
+                    <br>
+                    <label for="Year" style="color:white">MovieYear  : </label>
+                    <span id="spanyear" style="color:white"></span>
+                    <br>
+                    <label for="Runtime" style="color:white">MovieRuntime  : </label>
+                    <span id="spanRuntime" style="color:white"></span>
+                    <br>
+                    <label for="Genre" style="color:white">Genre  : </label>
+                    <span id="spanGenre" style="color:white"></span>
+                    <br>
+                    <label for="Director" style="color:white">MovieDirector  : </label>
+                    <span id="spanDirector" style="color:white"></span>
+                    <br>
+                    <label for="Actors" style="color:white">MovieActors  : </label>
+                    <span id="spanActor" style="color:white"></span>
+                    <br>
+                    
+           </div>
+           
+        <!-- </form> -->
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    
+  <script>
+   var normalfunc=()=>{
+console.log(window.localStorage.getItem('searchvalue'))
+} 
+    
+    var value1;
+    window.onload= this.value1="";
+    function getkey(e){
+        var count=0; 
+        if(e.keyCode >= 65 && e.keyCode <= 90){
+          this.value1  += String.fromCharCode(e.keyCode);
+         window.localStorage.setItem('searchvalue', this.value1.toLowerCase());
+         document.getElementById('myInput').value=this.value1.toLowerCase();
+        console.log(this.value1.toLowerCase()); 
+    
+        }
+         
+    }
+    var movieinfo=document.getElementById("movieinfo");
+    var imgsrc;
+    function normal(){
+      document.getElementById('myInput').value="";
+      if(document.getElementById("MoviePoster")){
+        movieinfo.removeChild(imgsrc)
+      }
+      
+  asyncfun();
+}
+
+    var asyncfun=async ()=>{
+      this.value1="";
+      console.log(document.getElementById('myInput').value)
+      var imdbURL="http://www.omdbapi.com/?i=tt3896198&apikey=77252255&t="+window.localStorage.getItem('searchvalue');
+      console.log(imdbURL)
+         try{
+            var imdbresponse=await fetch(imdbURL);
+            var result=await imdbresponse.json();
+           document.getElementById("spantitle").innerText=result.Title;
+           document.getElementById("spanyear").innerText=result.Year;
+           document.getElementById("spanRuntime").innerText=result.Runtime;
+           document.getElementById("spanGenre").innerText=result.Genre;
+           document.getElementById("spanDirector").innerText=result.Director;
+           document.getElementById("spanActor").innerText=result.Actors;
+           var image=result.Poster;
+           imgsrc=document.createElement("IMG")
+           imgsrc.setAttribute("id","MoviePoster");
+           imgsrc.setAttribute("src",image);
+           imgsrc.setAttribute("alt","poster");
+           movieinfo.appendChild(imgsrc);
+           
+        }catch(error){
+          console.log("error");
+         }
+       }
+    
+  </script>
+</body>
+</html>

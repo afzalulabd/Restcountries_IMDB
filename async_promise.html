@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async_Promise</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <div class='container'>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="../Aug02/index.html">Fetch/Promise</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="../Aug02/async_promise.html">Async/Promise</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="../Aug02/aync_imdb.html">Async/IMDB</a>
+            </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="allcountry">
+    </div>
+
+</div>
+<script>
+
+window.onload =restcountries();
+
+   async function restcountries(){
+     try{
+      var countriesURL="https://restcountries.eu/rest/v2/all";
+      var allcountry = document.getElementById('allcountry');
+     var restcountryresponse=await fetch(countriesURL);
+     var result=await restcountryresponse.json();
+     let tags = '';
+              var no_country = 1;
+              var row = document.createElement('div');
+              for (var i = 0; i < result.length; i++) {
+  
+                  row.setAttribute('class', 'row mt-2');
+                  var col = document.createElement('div');
+                  col.setAttribute('id', i);
+                  col.setAttribute('class', 'col col-sm-2 col-md-4 col-lg-3 col-xl-3 mt-8');
+              
+                  tags = `
+                      <div class="card" style="height: 80%;">
+                          <div class="card-header">
+                              ${result[i].name}
+                          </div>
+                          <img src="${result[i].flag}" id="${result[i].alpha2Code}" style="width: 100% !important;height: 40% !important;" class="card-img-top cust-card-img" alt="${result[i].name}">
+                          <div class="card-body">
+                              <p class="card-text">
+                                  Capital: <span class="badge badge-success"> ${result[i].capital} </span><br>
+                                  Country Codes: <span class="badge "> ${result[i].alpha2Code}, ${result[i].alpha3Code}</span><br>
+                                  Region: <span class="badge "> ${result[i].region}</span>
+                              </p>
+                          </div>
+                      </div>
+                      `;
+                      no_country++;
+                      col.innerHTML = tags;
+                      
+                      col.setAttribute("onclick"," getWeatherData(getcountry("+i+"),getcountrycode("+i+"))");
+                      col.setAttribute("style","cursor: pointer")
+                      row.appendChild(col);
+                  allcountry.appendChild(row);
+                  }
+
+     }catch(error){
+      console.log("error");
+     }
+   }
+
+   var getcountry=(value)=>{
+  return document.getElementById(value).getElementsByTagName("div")[1].innerHTML;
+  }
+
+  var getcountrycode=(value)=>{
+  return document.getElementById(value).getElementsByTagName("img")[0].id;
+  }
+
+          
+  
+      function getWeatherData(value, code) {
+          var urlValues = '';
+          var weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=";
+          var weatherAPIKey = '&appid=915bc4c49f13857f82f06f7cef3c8a61';
+          var weatherMetric = '&units=metric';
+          urlValues += weatherURL + value.trim() + ',' + code + weatherAPIKey + weatherMetric
+          weatherdata(urlValues).then((data) => {
+                  console.log(data);
+                  alert('You selected Country: ' + data.name + ' and Temperature :' + data.main.temp+" celsius");
+              }).catch((err) => {
+                  alert("Couldn't find data for the selected country, Try again!");
+              });
+      }
+      
+      async function weatherdata(urlValues){
+        try{
+        var weatherresponse=await fetch(urlValues);
+     var result=await weatherresponse.json();
+      }catch(error){
+      console.log("error");
+     }
+     return result;
+      }
+     
+
+  
+</script> 
+
+</body>
+</html>
