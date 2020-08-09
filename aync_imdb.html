@@ -129,7 +129,7 @@ console.log(window.localStorage.getItem('searchvalue'))
     var asyncfun=async ()=>{
       this.value1="";
       console.log(document.getElementById('myInput').value)
-      var imdbURL="http://www.omdbapi.com/?i=tt3896198&apikey=77252255&t="+window.localStorage.getItem('searchvalue');
+      var imdbURL="https://www.omdbapi.com/?i=tt3896198&apikey=77252255&t="+window.localStorage.getItem('searchvalue');
       console.log(imdbURL)
          try{
             var imdbresponse=await fetch(imdbURL);
